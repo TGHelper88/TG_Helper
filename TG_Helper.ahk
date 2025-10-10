@@ -5,19 +5,50 @@
 ; Версия: AutoHotkey v1.1
 
 #SingleInstance Force
-; === Проверка обновлений TG Helper ===
-currentVersion := "1.0.0"  ; текущая версия твоей программы
+; === Проверка обновлений TG Helper (с автообновлением) ===
+currentVersion := "1.1.36"  ; текущая версия программы
 updateURL := "https://raw.githubusercontent.com/TGHelper88/TG_Helper/main/version.txt"
+exeURL := "https://github.com/TGHelper88/TG_Helper/raw/main/TG_Helper.exe"
+newExe := A_ScriptDir . "\TG_Helper_new.exe"
 
+; --- Скачиваем номер версии ---
 UrlDownloadToFile, %updateURL%, local_version.txt
 FileRead, latestVersion, local_version.txt
+latestVersion := Trim(latestVersion)
 
-if (Trim(latestVersion) != currentVersion)
+if (latestVersion = "")
 {
-    MsgBox, 64, Обновление, 🚀 Доступна новая версия %latestVersion%!`nХотите открыть страницу загрузки?
-    IfMsgBox, Yes
-        Run, https://github.com/TGHelper88/TG_Helper/releases/latest
+    MsgBox, 48, Ошибка, ⚠️ Не удалось получить информацию об обновлении.
 }
+else if (latestVersion != currentVersion)
+{
+    MsgBox, 4, Обновление, 🚀 Доступна новая версия %latestVersion%!`n`nСкачать и установить сейчас?
+    IfMsgBox, Yes
+    {
+        ToolTip, ⏬ Загрузка новой версии...
+        UrlDownloadToFile, %exeURL%, %newExe%
+        ToolTip
+
+        if (FileExist(newExe))
+        {
+            MsgBox, 64, Успешно, ✅ Обновление загружено!`nПрограмма будет перезапущена.
+            Run, %newExe%
+            ExitApp
+        }
+        else
+        {
+            MsgBox, 48, Ошибка, ❌ Не удалось скачать обновление.
+        }
+    }
+}
+else
+{
+    ToolTip, ✅ Установлена последняя версия (%currentVersion%)
+    Sleep, 1500
+    ToolTip
+}
+
+
 
 #NoEnv
 SetWorkingDir, %A_ScriptDir%
