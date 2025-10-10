@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="https://raw.githubusercontent.com/TGHelper88/TG_Helper/main/tghelper_logo.png" width="120" height="120" alt="TG Helper Logo"/>
+</p>
+
 # 🧩 TG Helper
 
 **TG Helper** — это лёгкий инструмент для автоматизации Telegram Desktop.  
